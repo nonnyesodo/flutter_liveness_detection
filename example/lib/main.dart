@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_liveness_detection/flutter_liveness_detection.dart';
@@ -12,7 +11,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-/// Requests camera permission from the user.
 Future<void> requestCameraPermission() async {
   final status = await Permission.camera.request();
   if (!status.isGranted) {
@@ -26,6 +24,7 @@ class PermissionDeniedApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: const Text("Permission Denied"),
@@ -53,6 +52,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Material App',
       home: HomePage(),
     );

@@ -11,9 +11,10 @@ This plugin validates the presence of a live human being by detecting natural fa
 
 ---
 
-![Pub Version](https://img.shields.io/pub/v/flutter_liveness_detection.svg)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)
-![License](https://img.shields.io/github/license/rahmanprofile/flutter_liveness_detection)
+[![pub package](https://img.shields.io/pub/v/flutter_liveness_detection.svg)](https://pub.dev/packages/flutter_liveness_detection)
+![Pub Points](https://img.shields.io/pub/points/flutter_liveness_detection)
+![Likes](https://img.shields.io/pub/likes/flutter_liveness_detection)
+[![GitHub Repo](https://img.shields.io/badge/github-rahmanprofile%2Fflutter_liveness_detection-blue?logo=github)](https://github.com/rahmanprofile/flutter_liveness_detection)
 
 ---
 

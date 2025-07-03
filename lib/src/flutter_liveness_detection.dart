@@ -129,18 +129,15 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         break;
       case 'blink':
         actionCompleted =
-            (face.leftEyeOpenProbability != null &&
-                face.leftEyeOpenProbability! < 0.3) ||
-            (face.rightEyeOpenProbability != null &&
-                face.rightEyeOpenProbability! < 0.3);
+            (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) ||
+            (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
         break;
       case 'lookRight':
         actionCompleted =
             face.headEulerAngleY != null && face.headEulerAngleY! < -10;
         break;
       case 'lookLeft':
-        actionCompleted =
-            face.headEulerAngleY != null && face.headEulerAngleY! > 10;
+        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
         break;
     }
 
@@ -218,8 +215,22 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                     bottom: 16,
                     left: 16,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
-                      color: Colors.black54,
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color(0xFF39FF14),
+                          width: 2.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF39FF14).withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -239,6 +250,32 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       ),
                     ),
                   ),
+
+                  // Positioned(
+                  //   bottom: 16,
+                  //   left: 16,
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(8),
+                  //     color: Colors.black54,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           'Smile: ${smilingProbability != null ? (smilingProbability! * 100).toStringAsFixed(2) : 'N/A'}%',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //         Text(
+                  //           'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //         Text(
+                  //           'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               )
               : const Center(child: CircularProgressIndicator()),
