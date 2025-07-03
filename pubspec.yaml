@@ -10,7 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  cupertino_icons: ^1.0.8
+  google_mlkit_face_detection: ^0.12.0
+  camera: ^0.11.0+2
+  permission_handler: ^11.3.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
