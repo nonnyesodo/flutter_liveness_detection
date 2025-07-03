@@ -16,7 +16,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         enableContours: true,
         enableClassification: true,
         minFaceSize: 0.3,
-        performanceMode: FaceDetectorMode.fast),
+        performanceMode: FaceDetectorMode.fast,
+    ),
   );
 
   late CameraController cameraController;
@@ -178,10 +179,10 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.blueAccent,
         toolbarHeight: 70,
         centerTitle: true,
-        title: const Text("Verify Your Identity"),
+        title: const Text("Verify"),
       ),
       body: isCameraInitialized
           ? Stack(

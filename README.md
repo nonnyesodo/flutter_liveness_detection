@@ -1,39 +1,42 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# 🧠 flutter_liveness_detection
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+**flutter_liveness_detection** is a powerful and easy-to-integrate Flutter plugin that enables **real-time liveness detection** using the device’s front camera.  
+This plugin validates the presence of a live human being by detecting natural facial movements such as:
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+- 👁️ Eye Blinking
+- 😄 Smiling
+- 🔄 Head movement (left and right)
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+> Ideal for applications that require face-based identity verification, such as **KYC**, **biometric login**, or **attendance systems**.
 
-## Features
+---
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+![Pub Version](https://img.shields.io/pub/v/flutter_liveness_detection.svg)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-blue)
+![License](https://img.shields.io/github/license/rahmanprofile/flutter_liveness_detection)
 
-## Getting started
+---
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+## 🚀 Features
 
-## Usage
+- ✅ Detects facial movements to confirm user presence
+- 👁️ Eye blink detection
+- 😄 Smile detection
+- ↔️ Head movement detection (left & right)
+- 🎥 Front camera feed access
+- 🧠 Real-time detection using optimized performance
+- 📱 Supports both **Android** and **iOS**
+- 🛠️ Easy to integrate into any Flutter project
+- 🔐 Ideal for security-focused use cases
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+---
 
-```dart
-const like = 'sample';
-```
+## 🔧 Getting Started
 
-## Additional information
+### 📦 Installation
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Add the package to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  flutter_liveness_detection: ^1.0.0

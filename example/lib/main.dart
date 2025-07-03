@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Colors.blueAccent,
         toolbarHeight: 70,
         centerTitle: true,
         title: const Text('Verify Your Identity'),
@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 foregroundColor: Colors.black,
-                backgroundColor: Colors.amberAccent,
+                backgroundColor: Colors.blueAccent,
               ),
               onPressed: () async {
                 final cameras = await availableCameras();
@@ -106,8 +106,7 @@ class HomePage extends StatelessWidget {
                   );
                 }
               },
-              child: const Text(
-                'Verify Now',
+              child: const Text('Verify Now',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
