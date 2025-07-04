@@ -25,7 +25,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   bool isCameraInitialized = false;
   bool isDetecting = false;
   bool isFrontCamera = true;
-  List<String> challengeActions = ['smile', 'blink', 'lookRight', 'lookLeft'];
+  List<String> challengeActions = ['smile', 'blink'];
+  // List<String> challengeActions = ['smile', 'blink', 'lookRight', 'lookLeft'];
   int currentActionIndex = 0;
   bool waitingForNeutral = false;
 
@@ -124,21 +125,17 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
 
     switch (currentAction) {
       case 'smile':
-        actionCompleted =
-            face.smilingProbability != null && face.smilingProbability! > 0.5;
+        actionCompleted = face.smilingProbability != null && face.smilingProbability! > 0.5;
         break;
       case 'blink':
-        actionCompleted =
-            (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) ||
-            (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
+        actionCompleted = (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) || (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
         break;
-      case 'lookRight':
-        actionCompleted =
-            face.headEulerAngleY != null && face.headEulerAngleY! < -10;
-        break;
-      case 'lookLeft':
-        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
-        break;
+      // case 'lookRight':
+      //   actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! < -10;
+      //   break;
+      // case 'lookLeft':
+      //   actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
+      //   break;
     }
 
     if (actionCompleted) {
@@ -158,10 +155,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   bool isNeutralPosition(Face face) {
     return (face.smilingProbability == null || face.smilingProbability! < 0.1) &&
         (face.leftEyeOpenProbability == null || face.leftEyeOpenProbability! > 0.7) &&
-        (face.rightEyeOpenProbability == null ||
-            face.rightEyeOpenProbability! > 0.7) &&
-        (face.headEulerAngleY == null ||
-            (face.headEulerAngleY! > -10 && face.headEulerAngleY! < 10));
+        (face.rightEyeOpenProbability == null || face.rightEyeOpenProbability! > 0.7) &&
+        (face.headEulerAngleY == null || (face.headEulerAngleY! > -10 && face.headEulerAngleY! < 10));
   }
 
   @override
@@ -242,10 +237,10 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                             'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
-                          Text(
-                            'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
-                            style: const TextStyle(color: Color(0xFF39FF14)),
-                          ),
+                          // Text(
+                          //   'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
+                          //   style: const TextStyle(color: Color(0xFF39FF14)),
+                          // ),
                         ],
                       ),
                     ),
