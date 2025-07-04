@@ -1,6 +1,6 @@
 name: flutter_liveness_detection
 description: "A Flutter plugin for real-time liveness detection using face gestures like smile, blink, and head movement. Supports Android and iOS."
-version: 0.0.1
+version: 0.0.2
 homepage:
 
 environment:
