@@ -50,31 +50,51 @@ To trigger liveness detection, just call the widget inside a button press:
 
 ```dart
 ElevatedButton(
-  onPressed: () async {
-    // Step 1: Get available cameras
-    final cameras = await availableCameras();
+  onPressed: () async {  // Called when the button is pressed (async because we use await inside)
+    
+    /// 1️⃣ Get the list of available cameras on the device.
+    ///    availableCameras() comes from the camera package.
+    ///    It returns a List<CameraDescription>.
+    final List<CameraDescription> cameras = await availableCameras();
 
+    /// 2️⃣ Check if there is at least one camera available (we need front camera for detection)
     if (cameras.isNotEmpty) {
-      // Step 2: Navigate to the liveness detection screen
+
+      /// 3️⃣ Navigate to the FlutterLivenessDetection widget.
+      ///    Navigator.push() opens a new screen.
+      ///    MaterialPageRoute builds the liveness detection page.
+      ///    const FlutterLivenessDetection() is our custom widget that handles
+      ///    - opening the front camera
+      ///    - guiding the user through blink/smile/head movement challenges
+      ///    - capturing a selfie when successful
+      ///
+      ///    WHAT YOU GET: This returns an XFile? (nullable).
+      ///    If the user completes detection successfully, it will contain the selfie image file.
       final XFile? result = await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()),
       );
 
-      // Step 3: Handle the result
-      if (result != null) {
-        // You get a captured selfie
+      /// 4️⃣ Handle the result
+      if (result != null) { // If detection was successful (user completed liveness)
+        
+        /// 5️⃣ Print the selfie image path in the console.
+        ///     result.path gives the local file path of the captured selfie.
         print('Selfie path: ${result.path}');
+
+        /// 6️⃣ Show a success message to the user using a Snackbar.
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Verification Successful!')),
         );
       }
     } else {
+      /// 7️⃣ If no cameras are available, show an error message.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Camera not active!')),
       );
     }
   },
-  child: const Text('Start Liveness Detection'),
+  child: const Text('Start Liveness Detection'), // Button label
 )
+
 
