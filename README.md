@@ -50,51 +50,44 @@ To trigger liveness detection, just call the widget inside a button press:
 
 ```dart
 ElevatedButton(
-  onPressed: () async {  // Called when the button is pressed (async because we use await inside)
-    
-    /// 1️⃣ Get the list of available cameras on the device.
-    ///    availableCameras() comes from the camera package.
-    ///    It returns a List<CameraDescription>.
+  onPressed: () async {
+
+    /// 1️⃣ Check if the device has any cameras.
+    /// (We need at least one front camera to run liveness detection)
     final List<CameraDescription> cameras = await availableCameras();
 
-    /// 2️⃣ Check if there is at least one camera available (we need front camera for detection)
     if (cameras.isNotEmpty) {
 
-      /// 3️⃣ Navigate to the FlutterLivenessDetection widget.
-      ///    Navigator.push() opens a new screen.
-      ///    MaterialPageRoute builds the liveness detection page.
-      ///    const FlutterLivenessDetection() is our custom widget that handles
-      ///    - opening the front camera
-      ///    - guiding the user through blink/smile/head movement challenges
-      ///    - capturing a selfie when successful
-      ///
-      ///    WHAT YOU GET: This returns an XFile? (nullable).
-      ///    If the user completes detection successfully, it will contain the selfie image file.
+      /// 2️⃣ Open the liveness detection screen.
+      /// Call the **FlutterLivenessDetection** widget — this is required.
+      /// It will guide the user to blink, smile, or turn their head,
+      /// then take a selfie automatically.
       final XFile? result = await Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()),
       );
 
-      /// 4️⃣ Handle the result
-      if (result != null) { // If detection was successful (user completed liveness)
-        
-        /// 5️⃣ Print the selfie image path in the console.
-        ///     result.path gives the local file path of the captured selfie.
+      /// 3️⃣ If detection was successful, you will get a selfie image.
+      if (result != null) {
+        /// 4️⃣ Print the selfie image path (you can upload or save this file).
         print('Selfie path: ${result.path}');
 
-        /// 6️⃣ Show a success message to the user using a Snackbar.
+        /// 5️⃣ Show a success message to the user.
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Verification Successful!')),
         );
       }
     } else {
-      /// 7️⃣ If no cameras are available, show an error message.
+      /// ❌ No camera found → Show an error message.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Camera not active!')),
       );
     }
   },
-  child: const Text('Start Liveness Detection'), // Button label
+
+  /// The button users click to start liveness detection.
+  child: const Text('Start Liveness Detection'),
 )
+
 
 
