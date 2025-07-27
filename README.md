@@ -40,7 +40,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_liveness_detection: ^0.0.2
+  flutter_liveness_detection: ^0.0.3
 
 ```
 ---
