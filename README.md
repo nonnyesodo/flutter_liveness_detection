@@ -41,3 +41,40 @@ Add the package to your `pubspec.yaml`:
 ```yaml
 dependencies:
   flutter_liveness_detection: ^0.0.2
+
+```
+---
+## 🛠️ Quick Usage
+
+To trigger liveness detection, just call the widget inside a button press:
+
+```dart
+ElevatedButton(
+  onPressed: () async {
+    // Step 1: Get available cameras
+    final cameras = await availableCameras();
+
+    if (cameras.isNotEmpty) {
+      // Step 2: Navigate to the liveness detection screen
+      final XFile? result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()),
+      );
+
+      // Step 3: Handle the result
+      if (result != null) {
+        // You get a captured selfie
+        print('Selfie path: ${result.path}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Verification Successful!')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Camera not active!')),
+      );
+    }
+  },
+  child: const Text('Start Liveness Detection'),
+)
+
