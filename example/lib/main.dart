@@ -82,63 +82,55 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Please click the button below to start verification',
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+            const Text('Please click the button below to start verification', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
             const SizedBox(height: 30),
 
             (imageFile != null) ?
-            SizedBox(
-                height: 200,width: 150,
-                child: Image.file(imageFile!),
-            ) :
-            SizedBox(),
+            SizedBox(height: 200,width: 150, child: Image.file(imageFile!))
+                : SizedBox(),
 
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.blueAccent,
               ),
               onPressed: () async {
-                final cameras = await availableCameras();
+
+                /// 1️⃣ Check if the device has any cameras.
+                /// (We need at least one front camera to run liveness detection)
+                final List<CameraDescription> cameras = await availableCameras();
+
                 if (cameras.isNotEmpty) {
+
+                  /// 2️⃣ Open the liveness detection screen.
+                  /// Call the **FlutterLivenessDetection** widget — this is required.
+                  /// It will guide the user to blink, smile, or turn their head,
+                  /// then take a selfie automatically.
                   final XFile? result = await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()),
                   );
 
+                  /// 3️⃣ If detection was successful, you will get a selfie image.
                   if (result != null) {
-                    setState(() {
-                      imageFile = File(result.path);
-                    });
+                    /// 4️⃣ Print the selfie image path (you can upload or save this file).
+                    print('Selfie path: ${result.path}');
 
+                    /// 5️⃣ Show a success message to the user.
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Verification Successful!')),
                     );
                   }
                 } else {
+                  /// ❌ No camera found → Show an error message.
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Camera not active!')),
                   );
                 }
               },
-
-              // onPressed: () async {
-              //   final cameras = await availableCameras();
-              //   if (cameras.isNotEmpty) {
-              //     final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()));
-              //     if (result == true) {
-              //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Verification Successful!')));
-              //     }
-              //   } else {
-              //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Camera not active!')));
-              //   }
-              // },
-
               child: const Text('Verify Now',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
