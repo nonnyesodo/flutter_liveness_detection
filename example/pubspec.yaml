@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_liveness_detection:
     path: ../../flutter_liveness_detection
+  rename: ^3.1.0
 
 dev_dependencies:
   flutter_test:

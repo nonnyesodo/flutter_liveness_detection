@@ -7,8 +7,7 @@ class FlutterLivenessDetection extends StatefulWidget {
   const FlutterLivenessDetection({super.key});
 
   @override
-  State<FlutterLivenessDetection> createState() =>
-      _FlutterLivenessDetectionState();
+  State<FlutterLivenessDetection> createState() => _FlutterLivenessDetectionState();
 }
 
 class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
@@ -44,14 +43,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
 
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
-    final frontCamera = cameras.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-    );
-    cameraController = CameraController(
-      frontCamera,
-      ResolutionPreset.high,
-      enableAudio: false,
-    );
+    final frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
+    cameraController = CameraController(frontCamera, ResolutionPreset.high, enableAudio: false);
     await cameraController.initialize();
     if (mounted) {
       setState(() {

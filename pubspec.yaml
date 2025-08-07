@@ -1,6 +1,6 @@
 name: flutter_liveness_detection
 description: "A Flutter plugin for real-time liveness detection using face gestures like smile, blink, and head movement. Supports Android and iOS."
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/rahmanprofile/flutter_liveness_detection
 repository: https://github.com/rahmanprofile/flutter_liveness_detection
 issue_tracker: https://github.com/rahmanprofile/flutter_liveness_detection/issues
@@ -12,11 +12,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+  permission_handler: ^11.3.1
+  camera_android_camerax: ^0.6.19+1
   google_mlkit_face_detection: ^0.12.0
   camera: ^0.11.0+2
-  permission_handler: ^11.3.1
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
