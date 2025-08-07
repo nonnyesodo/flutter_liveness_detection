@@ -43,6 +43,22 @@ dependencies:
   flutter_liveness_detection: ^0.0.4
 
 ```
+
+---
+
+## 📋 Permissions & Requirements
+
+To use `flutter_liveness_detection`, ensure the following:
+
+### ✅ Android Requirements:
+- **Minimum SDK version:** `21`
+- **Permissions Required:**
+  Add these to your `AndroidManifest.xml` file:
+
+```xml
+<uses-permission android:name="android.permission.CAMERA"/>
+```
+
 ---
 ## 🛠️ Quick Usage
 

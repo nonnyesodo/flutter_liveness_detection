@@ -131,8 +131,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! < -10;
         break;
     }
-
-
     if (actionCompleted) {
       currentActionIndex++;
       if (currentActionIndex >= challengeActions.length) {
@@ -239,32 +237,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       ),
                     ),
                   ),
-
-                  // Positioned(
-                  //   bottom: 16,
-                  //   left: 16,
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(8),
-                  //     color: Colors.black54,
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         Text(
-                  //           'Smile: ${smilingProbability != null ? (smilingProbability! * 100).toStringAsFixed(2) : 'N/A'}%',
-                  //           style: const TextStyle(color: Color(0xFF39FF14)),
-                  //         ),
-                  //         Text(
-                  //           'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
-                  //           style: const TextStyle(color: Color(0xFF39FF14)),
-                  //         ),
-                  //         Text(
-                  //           'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
-                  //           style: const TextStyle(color: Color(0xFF39FF14)),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               )
               : const Center(child: CircularProgressIndicator()),
