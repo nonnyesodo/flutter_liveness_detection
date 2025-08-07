@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:camera/camera.dart';
+import 'moment/moment.dart';
 
 class FlutterLivenessDetection extends StatefulWidget {
   const FlutterLivenessDetection({super.key});
@@ -24,8 +25,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   bool isCameraInitialized = false;
   bool isDetecting = false;
   bool isFrontCamera = true;
-  List<String> challengeActions = ['smile', 'blink'];
-  // List<String> challengeActions = ['smile', 'blink', 'lookRight', 'lookLeft'];
+  List<Moment> challengeActions = [Moment.smile, Moment.eyeblink, Moment.leftPose, Moment.rightPose];
   int currentActionIndex = 0;
   bool waitingForNeutral = false;
 
@@ -113,23 +113,25 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       }
     }
 
-    String currentAction = challengeActions[currentActionIndex];
+    Moment currentAction = challengeActions[currentActionIndex];
     bool actionCompleted = false;
 
     switch (currentAction) {
-      case 'smile':
+      case Moment.smile:
         actionCompleted = face.smilingProbability != null && face.smilingProbability! > 0.5;
         break;
-      case 'blink':
-        actionCompleted = (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) || (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
+      case Moment.eyeblink:
+        actionCompleted = (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) ||
+            (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
         break;
-      // case 'lookRight':
-      //   actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! < -10;
-      //   break;
-      // case 'lookLeft':
-      //   actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
-      //   break;
+      case Moment.leftPose:
+        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
+        break;
+      case Moment.rightPose:
+        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! < -10;
+        break;
     }
+
 
     if (actionCompleted) {
       currentActionIndex++;
@@ -178,8 +180,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       color: Colors.black54,
                       child: Column(
                         children: [
-                          Text(
-                            'Please ${getActionDescription(challengeActions[currentActionIndex])}',
+                          Text('Please ${getActionDescription(challengeActions[currentActionIndex])}',
                             style: const TextStyle(
                               color: Color(0xFF39FF14),
                               fontSize: 18,
@@ -230,10 +231,10 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                             'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
-                          // Text(
-                          //   'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
-                          //   style: const TextStyle(color: Color(0xFF39FF14)),
-                          // ),
+                          Text(
+                            'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
+                            style: const TextStyle(color: Color(0xFF39FF14)),
+                          ),
                         ],
                       ),
                     ),
@@ -269,20 +270,17 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
               : const Center(child: CircularProgressIndicator()),
     );
   }
-
-  String getActionDescription(String action) {
+  String getActionDescription(Moment action) {
     switch (action) {
-      case 'smile':
+      case Moment.smile:
         return 'smile';
-      case 'blink':
+      case Moment.eyeblink:
         return 'blink';
-      case 'lookRight':
-        return 'look right';
-      case 'lookLeft':
+      case Moment.leftPose:
         return 'look left';
-      default:
-        return '';
-    }
+      case Moment.rightPose:
+        return 'look right';
+      }
   }
 }
 
