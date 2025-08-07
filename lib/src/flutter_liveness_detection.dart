@@ -5,7 +5,8 @@ import 'package:camera/camera.dart';
 import 'moment/moment.dart';
 
 class FlutterLivenessDetection extends StatefulWidget {
-  const FlutterLivenessDetection({super.key});
+  final List<Moment> moments;
+  const FlutterLivenessDetection({super.key, required this.moments});
 
   @override
   State<FlutterLivenessDetection> createState() => _FlutterLivenessDetectionState();
@@ -25,7 +26,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   bool isCameraInitialized = false;
   bool isDetecting = false;
   bool isFrontCamera = true;
-  List<Moment> challengeActions = [Moment.smile, Moment.eyeblink, Moment.leftPose, Moment.rightPose];
   int currentActionIndex = 0;
   bool waitingForNeutral = false;
 
@@ -38,7 +38,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   void initState() {
     super.initState();
     initializeCamera();
-    challengeActions.shuffle();
+    widget.moments.shuffle();
   }
 
   Future<void> initializeCamera() async {
@@ -113,7 +113,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       }
     }
 
-    Moment currentAction = challengeActions[currentActionIndex];
+    Moment currentAction = widget.moments[currentActionIndex];
     bool actionCompleted = false;
 
     switch (currentAction) {
@@ -133,7 +133,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
     if (actionCompleted) {
       currentActionIndex++;
-      if (currentActionIndex >= challengeActions.length) {
+      if (currentActionIndex >= widget.moments.length) {
         currentActionIndex = 0;
         if (mounted) {
           final XFile selfie = await cameraController.takePicture();
@@ -178,7 +178,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       color: Colors.black54,
                       child: Column(
                         children: [
-                          Text('Please ${getActionDescription(challengeActions[currentActionIndex])}',
+                          Text('Please ${getActionDescription(widget.moments[currentActionIndex])}',
                             style: const TextStyle(
                               color: Color(0xFF39FF14),
                               fontSize: 18,
@@ -187,7 +187,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Step ${currentActionIndex + 1} of ${challengeActions.length}',
+                            'Step ${currentActionIndex + 1} of ${widget.moments.length}',
                             style: const TextStyle(
                               color: Color(0xFF39FF14),
                               fontSize: 16,

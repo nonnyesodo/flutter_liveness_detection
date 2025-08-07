@@ -84,12 +84,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Text('Please click the button below to start verification', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
             const SizedBox(height: 30),
-
-            (imageFile != null) ?
-            SizedBox(height: 200,width: 150, child: Image.file(imageFile!))
-                : SizedBox(),
-
-
+            (imageFile != null) ? SizedBox(height: 200,width: 150, child: Image.file(imageFile!)) : SizedBox(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
@@ -98,42 +93,47 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.blueAccent,
               ),
               onPressed: () async {
-
-                /// 1️⃣ Check if the device has any cameras.
-                /// (We need at least one front camera to run liveness detection)
+                // Step 1: Get the list of available cameras on the device
                 final List<CameraDescription> cameras = await availableCameras();
 
+                // Step 2: Proceed only if there's at least one camera (front camera)
                 if (cameras.isNotEmpty) {
+                  // 🧠 You can set any 2 or more actions from below to verify the user is real.
+                  // The user will be asked to perform these actions for verification.
+                  List<Moment> challengeActions = [
+                    Moment.smile,       // 😀 Ask user to smile
+                    Moment.eyeblink,    // 👁️ Ask user to blink
+                    Moment.leftPose,    // 👈 Turn head left
+                    Moment.rightPose,   // 👉 Turn head right
+                  ];
 
-                  /// 2️⃣ Open the liveness detection screen.
-                  /// Call the **FlutterLivenessDetection** widget — this is required.
-                  /// It will guide the user to blink, smile, or turn their head,
-                  /// then take a selfie automatically.
-                  final XFile? result = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const FlutterLivenessDetection()),
+                  // Step 3: Start the liveness detection screen with defined actions, Call this widget 'FlutterLivenessDetection'
+                  final XFile? result = await Navigator.push(context,
+                    MaterialPageRoute(
+                      builder: (context) => FlutterLivenessDetection(moments: challengeActions),
+                    ),
                   );
 
-                  /// 3️⃣ If detection was successful, you will get a selfie image.
+                  // Step 4: If selfie is returned, that means verification passed
                   if (result != null) {
-                    /// 4️⃣ Print the selfie image path (you can upload or save this file).
-                    print('Selfie path: ${result.path}');
+                    setState(() {
+                      imageFile = File(result.path);
+                    });
 
-                    /// 5️⃣ Show a success message to the user.
+                    // Step 5: You can save/upload the image. Show success message.
+                    print('Selfie path: ${result.path}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Verification Successful!')),
                     );
                   }
                 } else {
-                  /// ❌ No camera found → Show an error message.
+                  // ❌ No camera found on device
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Camera not active!')),
                   );
                 }
               },
-              child: const Text('Verify Now',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              ),
+              child: const Text('Verify Now', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             ),
           ],
         ),
