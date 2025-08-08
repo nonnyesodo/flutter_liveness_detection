@@ -44,7 +44,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
-    cameraController = CameraController(frontCamera, ResolutionPreset.high, enableAudio: false);
+    cameraController = CameraController(frontCamera, ResolutionPreset.low, enableAudio: false,imageFormatGroup: ImageFormatGroup.nv21);
     await cameraController.initialize();
     if (mounted) {
       setState(() {
@@ -54,18 +54,38 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
   }
 
+  // void startFaceDetection() {
+  //   if (isCameraInitialized) {
+  //     cameraController.startImageStream((CameraImage image) {
+  //       if (!isDetecting) {
+  //         isDetecting = true;
+  //         detectFaces(image).then((_) {
+  //           isDetecting = false;
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+
+  DateTime? lastDetectionTime;
+
   void startFaceDetection() {
     if (isCameraInitialized) {
       cameraController.startImageStream((CameraImage image) {
-        if (!isDetecting) {
-          isDetecting = true;
-          detectFaces(image).then((_) {
-            isDetecting = false;
-          });
+        final now = DateTime.now();
+        if (lastDetectionTime == null || now.difference(lastDetectionTime!) > Duration(milliseconds: 300)) {
+          lastDetectionTime = now;
+          if (!isDetecting) {
+            isDetecting = true;
+            detectFaces(image).then((_) {
+              isDetecting = false;
+            });
+          }
         }
       });
     }
   }
+
 
   Future<void> detectFaces(CameraImage image) async {
     try {
@@ -74,12 +94,13 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         allBytes.putUint8List(plane.bytes);
       }
       final bytes = allBytes.done().buffer.asUint8List();
+      InputImageRotation rotation = InputImageRotationValue.fromRawValue(cameraController.description.sensorOrientation) ?? InputImageRotation.rotation270deg;
 
       final inputImage = InputImage.fromBytes(
         bytes: bytes,
         metadata: InputImageMetadata(
           size: Size(image.width.toDouble(), image.height.toDouble()),
-          rotation: InputImageRotation.rotation270deg,
+          rotation: rotation,
           format: InputImageFormat.nv21,
           bytesPerRow: image.planes[0].bytesPerRow,
         ),
@@ -163,8 +184,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          isCameraInitialized
+      body: isCameraInitialized
               ? Stack(
                 children: [
                   Positioned.fill(child: CameraPreview(cameraController)),
@@ -179,19 +199,12 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       child: Column(
                         children: [
                           Text('Please ${getActionDescription(widget.moments[currentActionIndex])}',
-                            style: const TextStyle(
-                              color: Color(0xFF39FF14),
-                              fontSize: 18,
-                            ),
+                            style: const TextStyle(color: Color(0xFF39FF14), fontSize: 18),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            'Step ${currentActionIndex + 1} of ${widget.moments.length}',
-                            style: const TextStyle(
-                              color: Color(0xFF39FF14),
-                              fontSize: 16,
-                            ),
+                          Text('Step ${currentActionIndex + 1} of ${widget.moments.length}',
+                            style: const TextStyle(color: Color(0xFF39FF14), fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         ],
