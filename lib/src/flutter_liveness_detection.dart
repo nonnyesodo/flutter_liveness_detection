@@ -44,7 +44,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
-    cameraController = CameraController(frontCamera, ResolutionPreset.low, enableAudio: false,imageFormatGroup: ImageFormatGroup.nv21);
+    cameraController = CameraController(frontCamera, ResolutionPreset.high,fps: 10, enableAudio: false);
     await cameraController.initialize();
     if (mounted) {
       setState(() {
@@ -94,13 +94,12 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         allBytes.putUint8List(plane.bytes);
       }
       final bytes = allBytes.done().buffer.asUint8List();
-      InputImageRotation rotation = InputImageRotationValue.fromRawValue(cameraController.description.sensorOrientation) ?? InputImageRotation.rotation270deg;
 
       final inputImage = InputImage.fromBytes(
         bytes: bytes,
         metadata: InputImageMetadata(
           size: Size(image.width.toDouble(), image.height.toDouble()),
-          rotation: rotation,
+          rotation: InputImageRotation.rotation270deg,
           format: InputImageFormat.nv21,
           bytesPerRow: image.planes[0].bytesPerRow,
         ),
