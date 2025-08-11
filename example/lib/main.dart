@@ -26,9 +26,7 @@ class PermissionDeniedApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Permission Denied"),
-        ),
+        appBar: AppBar(title: const Text("Permission Denied")),
         body: Center(
           child: AlertDialog(
             title: const Text("Permission Denied"),
