@@ -189,7 +189,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                   Positioned.fill(child: CameraPreview(cameraController)),
                   CustomPaint(painter: HeadMaskPainter(), child: Container()),
                   Positioned(
-                    top: 30,
+                    top: 40,
                     left: 16,
                     right: 16,
                     child: Container(
@@ -243,6 +243,10 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                           ),
                           Text(
                             'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
+                            style: const TextStyle(color: Color(0xFF39FF14)),
+                          ),
+                          Text(
+                            'Alpha - Grade',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
                         ],
