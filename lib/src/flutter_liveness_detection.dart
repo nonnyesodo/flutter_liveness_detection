@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -44,7 +45,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
-    cameraController = CameraController(frontCamera, ResolutionPreset.high,fps: 10, enableAudio: false);
+    cameraController = CameraController(frontCamera, ResolutionPreset.high, enableAudio: false);
     await cameraController.initialize();
     if (mounted) {
       setState(() {
@@ -53,19 +54,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       startFaceDetection();
     }
   }
-
-  // void startFaceDetection() {
-  //   if (isCameraInitialized) {
-  //     cameraController.startImageStream((CameraImage image) {
-  //       if (!isDetecting) {
-  //         isDetecting = true;
-  //         detectFaces(image).then((_) {
-  //           isDetecting = false;
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
 
   DateTime? lastDetectionTime;
 
@@ -86,29 +74,25 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
   }
 
-
   Future<void> detectFaces(CameraImage image) async {
     try {
       final WriteBuffer allBytes = WriteBuffer();
       for (Plane plane in image.planes) {
         allBytes.putUint8List(plane.bytes);
       }
-      final bytes = allBytes.done().buffer.asUint8List();
-
+      // final bytes = allBytes.done().buffer.asUint8List();
+      final bytes = yuv420ToNv21(image);
       final inputImage = InputImage.fromBytes(
         bytes: bytes,
         metadata: InputImageMetadata(
           size: Size(image.width.toDouble(), image.height.toDouble()),
           rotation: InputImageRotation.rotation270deg,
           format: InputImageFormat.nv21,
-          bytesPerRow: image.planes[0].bytesPerRow,
+          bytesPerRow: image.width,
         ),
       );
-
       final faces = await faceDetector.processImage(inputImage);
-
       if (!mounted) return;
-
       if (faces.isNotEmpty) {
         final face = faces.first;
         setState(() {
@@ -124,6 +108,57 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
   }
 
+  Uint8List yuv420ToNv21(CameraImage image) {
+    final width = image.width;
+    final height = image.height;
+    final ySize = width * height;
+    final uvSize = width ~/ 2 * height ~/ 2;
+    final nv21 = Uint8List(ySize + uvSize * 2);
+    // Copy Y plane
+    int index = 0;
+    for (int row = 0; row < height; row++) {
+      final start = row * image.planes[0].bytesPerRow;
+      nv21.setRange(index, index + width, image.planes[0].bytes.sublist(start, start + width));
+      index += width;
+    }
+
+    // Copy interleaved VU (NV21)
+    final uPlane = image.planes[1].bytes;
+    final vPlane = image.planes[2].bytes;
+    for (int row = 0; row < height ~/ 2; row++) {
+      for (int col = 0; col < width ~/ 2; col++) {
+        final uIndex = row * image.planes[1].bytesPerRow + col;
+        final vIndex = row * image.planes[2].bytesPerRow + col;
+        nv21[index++] = vPlane[vIndex];
+        nv21[index++] = uPlane[uIndex];
+      }
+    }
+    return nv21;
+  }
+
+
+  // Uint8List convertYUV420toNV21(CameraImage image) {
+  //   final yPlane = image.planes[0].bytes;
+  //   final uPlane = image.planes[1].bytes;
+  //   final vPlane = image.planes[2].bytes;
+  //
+  //   final nv21 = Uint8List(yPlane.length + uPlane.length + vPlane.length);
+  //   int index = 0;
+  //
+  //   // Copy Y plane
+  //   nv21.setRange(0, yPlane.length, yPlane);
+  //   index += yPlane.length;
+  //
+  //   // Interleave V and U
+  //   for (int i = 0; i < uPlane.length; i++) {
+  //     nv21[index++] = vPlane[i];
+  //     nv21[index++] = uPlane[i];
+  //   }
+  //
+  //   return nv21;
+  // }
+
+
   void checkChallenge(Face face) async {
     if (waitingForNeutral) {
       if (isNeutralPosition(face)) {
@@ -135,7 +170,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
 
     Moment currentAction = widget.moments[currentActionIndex];
     bool actionCompleted = false;
-
     switch (currentAction) {
       case Moment.smile:
         actionCompleted = face.smilingProbability != null && face.smilingProbability! > 0.5;
@@ -245,10 +279,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                             'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
-                          Text(
-                            'Alpha - Grade',
-                            style: const TextStyle(color: Color(0xFF39FF14)),
-                          ),
+                          Text('Version: 0.0.5', style: TextStyle(color: Color(0xFF39FF14))),
                         ],
                       ),
                     ),
