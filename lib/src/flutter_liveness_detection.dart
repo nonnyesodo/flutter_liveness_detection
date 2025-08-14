@@ -279,7 +279,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                             'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
-                          Text('Version: 0.0.5', style: TextStyle(color: Color(0xFF39FF14))),
+                          Text('Version: 0.0.6', style: TextStyle(color: Color(0xFF39FF14))),
                         ],
                       ),
                     ),
