@@ -80,35 +80,52 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Please click the button below to start verification', textAlign: TextAlign.center, style: TextStyle(fontSize: 20)),
+            const Text(
+              'Please click the button below to start verification',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
             const SizedBox(height: 30),
-            (imageFile != null) ? SizedBox(height: 200,width: 150, child: Image.file(imageFile!)) : SizedBox(),
+            (imageFile != null)
+                ? SizedBox(
+                  height: 200,
+                  width: 150,
+                  child: Image.file(imageFile!),
+                )
+                : SizedBox(),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.blueAccent,
               ),
               onPressed: () async {
                 // Step 1: Get the list of available cameras on the device
-                final List<CameraDescription> cameras = await availableCameras();
+                final List<CameraDescription> cameras =
+                    await availableCameras();
 
                 // Step 2: Proceed only if there's at least one camera (front camera)
                 if (cameras.isNotEmpty) {
                   // 🧠 You can set any 2 or more actions from below to verify the user is real.
                   // The user will be asked to perform these actions for verification.
                   List<Moment> challengeActions = [
-                    Moment.smile,       // 😀 Ask user to smile
-                    Moment.eyeblink,    // 👁️ Ask user to blink
-                    Moment.leftPose,    // 👈 Turn head left
-                    Moment.rightPose,   // 👉 Turn head right
+                    Moment.smile, // 😀 Ask user to smile
+                    Moment.eyeblink, // 👁️ Ask user to blink
+                    Moment.leftPose, // 👈 Turn head left
+                    Moment.rightPose, // 👉 Turn head right
                   ];
 
                   // Step 3: Start the liveness detection screen with defined actions, Call this widget 'FlutterLivenessDetection'
-                  final XFile? result = await Navigator.push(context,
+                  final XFile? result = await Navigator.push(
+                    context,
                     MaterialPageRoute(
-                      builder: (context) => FlutterLivenessDetection(moments: challengeActions),
+                      builder:
+                          (context) => FlutterLivenessDetection(
+                            moments: challengeActions,
+                          ),
                     ),
                   );
 
@@ -131,7 +148,10 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: const Text('Verify Now', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+              child: const Text(
+                'Verify Now',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
             ),
           ],
         ),

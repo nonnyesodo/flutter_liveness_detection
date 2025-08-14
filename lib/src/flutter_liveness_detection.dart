@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -10,7 +9,8 @@ class FlutterLivenessDetection extends StatefulWidget {
   const FlutterLivenessDetection({super.key, required this.moments});
 
   @override
-  State<FlutterLivenessDetection> createState() => _FlutterLivenessDetectionState();
+  State<FlutterLivenessDetection> createState() =>
+      _FlutterLivenessDetectionState();
 }
 
 class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
@@ -44,8 +44,14 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
 
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
-    final frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
-    cameraController = CameraController(frontCamera, ResolutionPreset.high, enableAudio: false);
+    final frontCamera = cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
+    );
+    cameraController = CameraController(
+      frontCamera,
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
     await cameraController.initialize();
     if (mounted) {
       setState(() {
@@ -61,7 +67,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     if (isCameraInitialized) {
       cameraController.startImageStream((CameraImage image) {
         final now = DateTime.now();
-        if (lastDetectionTime == null || now.difference(lastDetectionTime!) > Duration(milliseconds: 300)) {
+        if (lastDetectionTime == null ||
+            now.difference(lastDetectionTime!) > Duration(milliseconds: 300)) {
           lastDetectionTime = now;
           if (!isDetecting) {
             isDetecting = true;
@@ -118,7 +125,11 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     int index = 0;
     for (int row = 0; row < height; row++) {
       final start = row * image.planes[0].bytesPerRow;
-      nv21.setRange(index, index + width, image.planes[0].bytes.sublist(start, start + width));
+      nv21.setRange(
+        index,
+        index + width,
+        image.planes[0].bytes.sublist(start, start + width),
+      );
       index += width;
     }
 
@@ -135,7 +146,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
     return nv21;
   }
-
 
   // Uint8List convertYUV420toNV21(CameraImage image) {
   //   final yPlane = image.planes[0].bytes;
@@ -158,7 +168,6 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   //   return nv21;
   // }
 
-
   void checkChallenge(Face face) async {
     if (waitingForNeutral) {
       if (isNeutralPosition(face)) {
@@ -172,17 +181,23 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     bool actionCompleted = false;
     switch (currentAction) {
       case Moment.smile:
-        actionCompleted = face.smilingProbability != null && face.smilingProbability! > 0.5;
+        actionCompleted =
+            face.smilingProbability != null && face.smilingProbability! > 0.5;
         break;
       case Moment.eyeblink:
-        actionCompleted = (face.leftEyeOpenProbability != null && face.leftEyeOpenProbability! < 0.3) ||
-            (face.rightEyeOpenProbability != null && face.rightEyeOpenProbability! < 0.3);
+        actionCompleted =
+            (face.leftEyeOpenProbability != null &&
+                face.leftEyeOpenProbability! < 0.3) ||
+            (face.rightEyeOpenProbability != null &&
+                face.rightEyeOpenProbability! < 0.3);
         break;
       case Moment.leftPose:
-        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! > 10;
+        actionCompleted =
+            face.headEulerAngleY != null && face.headEulerAngleY! > 10;
         break;
       case Moment.rightPose:
-        actionCompleted = face.headEulerAngleY != null && face.headEulerAngleY! < -10;
+        actionCompleted =
+            face.headEulerAngleY != null && face.headEulerAngleY! < -10;
         break;
     }
     if (actionCompleted) {
@@ -200,10 +215,14 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   }
 
   bool isNeutralPosition(Face face) {
-    return (face.smilingProbability == null || face.smilingProbability! < 0.1) &&
-        (face.leftEyeOpenProbability == null || face.leftEyeOpenProbability! > 0.7) &&
-        (face.rightEyeOpenProbability == null || face.rightEyeOpenProbability! > 0.7) &&
-        (face.headEulerAngleY == null || (face.headEulerAngleY! > -10 && face.headEulerAngleY! < 10));
+    return (face.smilingProbability == null ||
+            face.smilingProbability! < 0.1) &&
+        (face.leftEyeOpenProbability == null ||
+            face.leftEyeOpenProbability! > 0.7) &&
+        (face.rightEyeOpenProbability == null ||
+            face.rightEyeOpenProbability! > 0.7) &&
+        (face.headEulerAngleY == null ||
+            (face.headEulerAngleY! > -10 && face.headEulerAngleY! < 10));
   }
 
   @override
@@ -217,7 +236,8 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isCameraInitialized
+      body:
+          isCameraInitialized
               ? Stack(
                 children: [
                   Positioned.fill(child: CameraPreview(cameraController)),
@@ -231,13 +251,21 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       color: Colors.black54,
                       child: Column(
                         children: [
-                          Text('Please ${getActionDescription(widget.moments[currentActionIndex])}',
-                            style: const TextStyle(color: Color(0xFF39FF14), fontSize: 18),
+                          Text(
+                            'Please ${getActionDescription(widget.moments[currentActionIndex])}',
+                            style: const TextStyle(
+                              color: Color(0xFF39FF14),
+                              fontSize: 18,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
-                          Text('Step ${currentActionIndex + 1} of ${widget.moments.length}',
-                            style: const TextStyle(color: Color(0xFF39FF14), fontSize: 16),
+                          Text(
+                            'Step ${currentActionIndex + 1} of ${widget.moments.length}',
+                            style: const TextStyle(
+                              color: Color(0xFF39FF14),
+                              fontSize: 16,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -257,7 +285,9 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF39FF14).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF39FF14,
+                            ).withValues(alpha: 0.2),
                             blurRadius: 8,
                             spreadRadius: 2,
                           ),
@@ -279,7 +309,10 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                             'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
                             style: const TextStyle(color: Color(0xFF39FF14)),
                           ),
-                          Text('Version: 0.0.6', style: TextStyle(color: Color(0xFF39FF14))),
+                          Text(
+                            'Version: 0.0.6',
+                            style: TextStyle(color: Color(0xFF39FF14)),
+                          ),
                         ],
                       ),
                     ),
@@ -289,6 +322,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
               : const Center(child: CircularProgressIndicator()),
     );
   }
+
   String getActionDescription(Moment action) {
     switch (action) {
       case Moment.smile:
@@ -299,21 +333,23 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         return 'look left';
       case Moment.rightPose:
         return 'look right';
-      }
+    }
   }
 }
 
 class HeadMaskPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    final paint =
+        Paint()
           ..color = Colors.black.withValues(alpha: 0.5)
           ..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width * 0.4;
 
-    final path = Path()
+    final path =
+        Path()
           ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
           ..addOval(Rect.fromCircle(center: center, radius: radius))
           ..fillType = PathFillType.evenOdd;
