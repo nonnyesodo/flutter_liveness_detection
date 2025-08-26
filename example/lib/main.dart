@@ -112,10 +112,10 @@ class _HomePageState extends State<HomePage> {
                   // 🧠 You can set any 2 or more actions from below to verify the user is real.
                   // The user will be asked to perform these actions for verification.
                   List<Moment> challengeActions = [
-                    Moment.smile, // 😀 Ask user to smile
-                    Moment.eyeblink, // 👁️ Ask user to blink
-                    Moment.leftPose, // 👈 Turn head left
-                    Moment.rightPose, // 👉 Turn head right
+                    Moment.leftPose,
+                    Moment.rightPose,
+                    Moment.smile,
+                    Moment.eyeblink,
                   ];
 
                   // Step 3: Start the liveness detection screen with defined actions, Call this widget 'FlutterLivenessDetection'

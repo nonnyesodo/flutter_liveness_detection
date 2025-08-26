@@ -1,3 +1,10 @@
+import java.util.Properties
+import java.io.FileInputStream
+val localProperties = Properties()
+localProperties.load(FileInputStream(rootProject.file("local.properties")))
+
+
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -7,7 +14,7 @@ plugins {
 android {
     namespace = "com.flutter.liveness.detection"
 //    compileSdk = flutter.compileSdkVersion
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -21,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId = "com.flutter.liveness.detection"
-        minSdk = 23
+        minSdkVersion(localProperties.getProperty("flutter.minSdkVersion").toInt())
         targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName

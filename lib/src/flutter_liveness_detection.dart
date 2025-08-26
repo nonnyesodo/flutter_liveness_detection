@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
@@ -243,80 +244,104 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                   Positioned.fill(child: CameraPreview(cameraController)),
                   CustomPaint(painter: HeadMaskPainter(), child: Container()),
                   Positioned(
-                    top: 40,
+                    bottom: 200,
                     left: 16,
                     right: 16,
+                    child: Text(
+                      'Please ${getActionDescription(widget.moments[currentActionIndex])}',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
                     child: Container(
-                      padding: const EdgeInsets.all(8),
-                      color: Colors.black54,
-                      child: Column(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Please ${getActionDescription(widget.moments[currentActionIndex])}',
-                            style: const TextStyle(
-                              color: Color(0xFF39FF14),
-                              fontSize: 18,
+                          Icon(Icons.info, color: Color(0xFF8921FF), size: 30),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.82,
+                            child: Text(
+                              (currentActionIndex + 1) == 4
+                                  ? "Make sure you’re in good light position and remove hats or sunglasses"
+                                  : 'Hold still while we capture your face. Use good lighting, and remove hats or sunglasses.',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Step ${currentActionIndex + 1} of ${widget.moments.length}',
-                            style: const TextStyle(
-                              color: Color(0xFF39FF14),
-                              fontSize: 16,
-                            ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
                     ),
                   ),
                   Positioned(
-                    bottom: 16,
-                    left: 16,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: const Color(0xFF39FF14),
-                          width: 2.0,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(
-                              0xFF39FF14,
-                            ).withValues(alpha: 0.2),
-                            blurRadius: 8,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Smile: ${smilingProbability != null ? (smilingProbability! * 100).toStringAsFixed(2) : 'N/A'}%',
-                            style: const TextStyle(color: Color(0xFF39FF14)),
-                          ),
-                          Text(
-                            'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
-                            style: const TextStyle(color: Color(0xFF39FF14)),
-                          ),
-                          Text(
-                            'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
-                            style: const TextStyle(color: Color(0xFF39FF14)),
-                          ),
-                          Text(
-                            'Version: 0.0.6',
-                            style: TextStyle(color: Color(0xFF39FF14)),
-                          ),
-                        ],
+                    top: 30,
+                    left: 20,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFFE9E3FF),
+                        child: Icon(CupertinoIcons.back),
                       ),
                     ),
                   ),
+                  // Positioned(
+                  //   bottom: 16,
+                  //   left: 16,
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.black54,
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       border: Border.all(
+                  //         color: const Color(0xFF39FF14),
+                  //         width: 2.0,
+                  //       ),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: const Color(
+                  //             0xFF39FF14,
+                  //           ).withValues(alpha: 0.2),
+                  //           blurRadius: 8,
+                  //           spreadRadius: 2,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     padding: const EdgeInsets.all(12),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           'Smile: ${smilingProbability != null ? (smilingProbability! * 100).toStringAsFixed(2) : 'N/A'}%',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //         Text(
+                  //           'Blink: ${leftEyeOpenProbability != null && rightEyeOpenProbability != null ? (((leftEyeOpenProbability! + rightEyeOpenProbability!) / 2) * 100).toStringAsFixed(2) : 'N/A'}%',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //         Text(
+                  //           'Look: ${headEulerAngleY != null ? headEulerAngleY!.toStringAsFixed(2) : 'N/A'}°',
+                  //           style: const TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //         Text(
+                  //           'Version: 0.0.6',
+                  //           style: TextStyle(color: Color(0xFF39FF14)),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               )
               : const Center(child: CircularProgressIndicator()),
@@ -326,13 +351,13 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   String getActionDescription(Moment action) {
     switch (action) {
       case Moment.smile:
-        return 'smile';
+        return 'Face the camera directly';
       case Moment.eyeblink:
-        return 'blink';
+        return 'Face the camera directly';
       case Moment.leftPose:
-        return 'look left';
+        return 'Slowly turn your head left';
       case Moment.rightPose:
-        return 'look right';
+        return 'Slowly turn your head right';
     }
   }
 }
