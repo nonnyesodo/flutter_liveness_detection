@@ -213,7 +213,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       if (currentActionIndex >= widget.moments.length) {
         currentActionIndex = 0;
         if (mounted) {
-          final XFile selfie = await cameraController.takePicture();
+          // final XFile selfie = await cameraController.takePicture();
           // Navigator.pop(context, selfie);
           Navigator.pop(context, capturedImages);
         }
