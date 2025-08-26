@@ -203,7 +203,9 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
     if (actionCompleted) {
       final XFile image = await cameraController.takePicture();
-      capturedImages.add(image);
+      setState(() {
+        capturedImages.add(image);
+      });
       currentActionIndex++;
       if (currentActionIndex >= widget.moments.length) {
         currentActionIndex = 0;
