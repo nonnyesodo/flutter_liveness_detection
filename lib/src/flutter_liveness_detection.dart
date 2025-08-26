@@ -294,17 +294,17 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 30,
-                    left: 20,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: CircleAvatar(
-                        backgroundColor: Color(0xFFE9E3FF),
-                        child: Icon(CupertinoIcons.back),
-                      ),
-                    ),
-                  ),
+                  // Positioned(
+                  //   top: 30,
+                  //   left: 20,
+                  //   child: GestureDetector(
+                  //     onTap: () => Navigator.pop(context),
+                  //     child: CircleAvatar(
+                  //       backgroundColor: Color(0xFFE9E3FF),
+                  //       child: Icon(CupertinoIcons.back),
+                  //     ),
+                  //   ),
+                  // ),
                   // Positioned(
                   //   bottom: 16,
                   //   left: 16,
