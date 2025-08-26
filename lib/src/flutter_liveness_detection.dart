@@ -207,7 +207,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       try {
         final XFile image = await cameraController.takePicture();
         capturedImages.add(image);
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(seconds: 2));
       } catch (e) {
         log("Error capturing image: $e");
       }
