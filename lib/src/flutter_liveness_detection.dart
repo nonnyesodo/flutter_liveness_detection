@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -205,6 +207,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       final XFile image = await cameraController.takePicture();
       setState(() {
         capturedImages.add(image);
+        log("message ${capturedImages.length}");
       });
       currentActionIndex++;
       if (currentActionIndex >= widget.moments.length) {
