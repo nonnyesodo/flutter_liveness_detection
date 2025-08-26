@@ -42,7 +42,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   void initState() {
     super.initState();
     initializeCamera();
-    widget.moments.shuffle();
+    // widget.moments.shuffle();
   }
 
   Future<void> initializeCamera() async {
