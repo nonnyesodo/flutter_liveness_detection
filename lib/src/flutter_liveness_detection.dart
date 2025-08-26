@@ -35,7 +35,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   double? leftEyeOpenProbability;
   double? rightEyeOpenProbability;
   double? headEulerAngleY;
-
+  List<XFile> capturedImages = [];
   @override
   void initState() {
     super.initState();
@@ -202,12 +202,15 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
         break;
     }
     if (actionCompleted) {
+      final XFile image = await cameraController.takePicture();
+      capturedImages.add(image);
       currentActionIndex++;
       if (currentActionIndex >= widget.moments.length) {
         currentActionIndex = 0;
         if (mounted) {
           final XFile selfie = await cameraController.takePicture();
-          Navigator.pop(context, selfie);
+          // Navigator.pop(context, selfie);
+          Navigator.pop(context, capturedImages);
         }
       } else {
         waitingForNeutral = true;
