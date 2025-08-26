@@ -205,10 +205,9 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
     }
     if (actionCompleted) {
       final XFile image = await cameraController.takePicture();
-      setState(() {
-        capturedImages.add(image);
-        log("message ${capturedImages.length}");
-      });
+
+      capturedImages.add(image);
+
       currentActionIndex++;
       if (currentActionIndex >= widget.moments.length) {
         currentActionIndex = 0;
@@ -294,17 +293,17 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //   top: 30,
-                  //   left: 20,
-                  //   child: GestureDetector(
-                  //     onTap: () => Navigator.pop(context),
-                  //     child: CircleAvatar(
-                  //       backgroundColor: Color(0xFFE9E3FF),
-                  //       child: Icon(CupertinoIcons.back),
-                  //     ),
-                  //   ),
-                  // ),
+                  Positioned(
+                    top: 30,
+                    left: 20,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFFE9E3FF),
+                        child: Icon(CupertinoIcons.back),
+                      ),
+                    ),
+                  ),
                   // Positioned(
                   //   bottom: 16,
                   //   left: 16,
