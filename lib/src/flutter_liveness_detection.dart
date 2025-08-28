@@ -22,7 +22,7 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
       enableContours: true,
       enableClassification: true,
       minFaceSize: 0.3,
-      performanceMode: FaceDetectorMode.fast,
+      performanceMode: FaceDetectorMode.accurate,
     ),
   );
 
@@ -362,9 +362,9 @@ class _FlutterLivenessDetectionState extends State<FlutterLivenessDetection> {
   String getActionDescription(Moment action) {
     switch (action) {
       case Moment.smile:
-        return 'Face the camera directly';
+        return 'Face the camera directly\nand smile';
       case Moment.eyeblink:
-        return 'Face the camera directly';
+        return 'Face the camera directly\nand blink';
       case Moment.leftPose:
         return 'Slowly turn your head left';
       case Moment.rightPose:
